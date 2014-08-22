@@ -67,7 +67,7 @@ internal class Rygel.Mediathek.VideoItemFactory : Object {
         var id = Checksum.compute_for_string (ChecksumType.MD5, title);
         var item = new VideoItem (id, parent, title);
 
-        item.mime_type = this.playlist_parser.mime_type;
+        (item as MediaObject).mime_type = this.playlist_parser.mime_type;
         item.author = "ZDF - Second German TV Channel Streams";
         item.date = date;
         item.description = description;

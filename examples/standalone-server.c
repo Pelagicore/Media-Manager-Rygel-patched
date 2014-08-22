@@ -122,7 +122,7 @@ int main (int argc, char *argv[])
             RygelMediaObject *object;
             GeeArrayList* uris;
 
-            rygel_media_item_set_mime_type (RYGEL_MEDIA_ITEM (item), content_type);
+            rygel_media_object_set_mime_type (RYGEL_MEDIA_OBJECT (item), content_type);
 
             object = RYGEL_MEDIA_OBJECT (item);
             gee_collection_add (GEE_COLLECTION (object->uris), uri);

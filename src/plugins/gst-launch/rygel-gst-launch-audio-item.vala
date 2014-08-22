@@ -38,7 +38,7 @@ public class Rygel.GstLaunch.AudioItem : Rygel.AudioItem, Item {
                       string         launch_line) {
         base (id, parent, title);
 
-        this.mime_type = mime_type;
+        (this as MediaObject).mime_type = mime_type;
         this.launch_line = launch_line;
     }
 

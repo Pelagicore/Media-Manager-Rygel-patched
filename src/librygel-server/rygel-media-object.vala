@@ -44,11 +44,36 @@ public abstract class Rygel.MediaObject : GLib.Object {
     public string upnp_class { get; construct set; }
     public uint64 modified { get; set; }
     public uint object_update_id { get; set; }
+    public string artist { get; set; }
+    public string mime_type { get; set; }
+    public string album { get; set; }
+
+    public Thumbnail album_art { get; set; }
 
     //TODO: { get; private set; } or, even better,
     // add virtual set_uri in Object and make add_uri() in Item into set_uri()
     // and make the uri property single-value.
     public Gee.ArrayList<string> uris;
+
+    public void lookup_album_art () {
+        assert (this.album_art == null);
+
+        var media_art_store = MediaArtStore.get_default ();
+        if (media_art_store == null) {
+            return;
+        }
+
+        try {
+            this.album_art = media_art_store.find_media_art_any (this);
+        } catch (Error err) {};
+    }
+
+    public void set_album_art_uri (string uri) {
+        if (this.album_art == null)
+            this.album_art = new Thumbnail();
+
+        this.album_art.uri = uri;
+    }
 
     // You can keep both an unowned and owned ref to parent of this MediaObject.
     // In most cases, one will only need to keep an unowned ref to avoid cyclic

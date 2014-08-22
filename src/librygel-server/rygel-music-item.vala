@@ -32,12 +32,8 @@ using GUPnP;
 public class Rygel.MusicItem : AudioItem {
     public new const string UPNP_CLASS = "object.item.audioItem.musicTrack";
 
-    public string artist { get; set; }
-    public string album { get; set; }
     public string genre { get; set; }
     public int track_number { get; set; default = -1; }
-
-    public Thumbnail album_art { get; set; }
 
     public MusicItem (string         id,
                       MediaContainer parent,
@@ -47,19 +43,6 @@ public class Rygel.MusicItem : AudioItem {
                 parent : parent,
                 title : title,
                 upnp_class : upnp_class);
-    }
-
-    public void lookup_album_art () {
-        assert (this.album_art == null);
-
-        var media_art_store = MediaArtStore.get_default ();
-        if (media_art_store == null) {
-            return;
-        }
-
-        try {
-            this.album_art = media_art_store.find_media_art_any (this);
-        } catch (Error err) {};
     }
 
     internal override void add_resources (DIDLLiteItem didl_item,

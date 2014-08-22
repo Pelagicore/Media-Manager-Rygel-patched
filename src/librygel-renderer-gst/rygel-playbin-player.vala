@@ -146,6 +146,7 @@ public class Rygel.Playbin.Player : GLib.Object, Rygel.MediaPlayer {
     }
 
     private string[] _allowed_playback_speeds = {
+        "-64", "-32", "-16", "-8", "-4", "-2", "-1", "-1/2", "-1/4", "-1/8", "-1/16",
         "1/16", "1/8", "1/4", "1/2", "1", "2", "4", "8", "16", "32", "64"
     };
     public string[] allowed_playback_speeds {
@@ -293,8 +294,7 @@ public class Rygel.Playbin.Player : GLib.Object, Rygel.MediaPlayer {
         get {
             int64 dur=0;
 
-            if (this.playbin.source != null &&
-                this.playbin.source.query_duration (Format.TIME, out dur)) {
+            if (this.playbin.query_duration (Format.TIME, out dur)) {
                 return dur / Gst.USECOND;
             } else {
                 return 0;
@@ -319,7 +319,7 @@ public class Rygel.Playbin.Player : GLib.Object, Rygel.MediaPlayer {
         get {
             int64 pos;
 
-            if (this.playbin.source.query_position (Format.TIME, out pos)) {
+            if (this.playbin.query_position (Format.TIME, out pos)) {
                 return pos / Gst.USECOND;
             } else {
                 return 0;

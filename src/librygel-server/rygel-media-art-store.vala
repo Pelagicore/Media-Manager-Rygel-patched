@@ -60,13 +60,18 @@ public class Rygel.MediaArtStore : GLib.Object {
         return media_art_store;
     }
 
-    public Thumbnail? find_media_art (MusicItem item,
-                                      bool      simple = false) throws Error {
+    public Thumbnail? find_media_art (MediaObject object,
+                                      bool        simple = false) throws Error {
         string[] types = { "track", "album", "artist", "podcast", "radio" };
         File file = null;
 
+        if (!(object is MusicItem || object is MediaContainer)) {
+            warning ("MediaObject is not MusicItem or MediaContainer");
+            return null;
+        }
+
         foreach (var type in types) {
-            file = this.get_media_art_file (type, item, simple);
+            file = this.get_media_art_file (type, object, simple);
             if (file.query_exists (null)) {
                 break;
             } else {
@@ -93,26 +98,27 @@ public class Rygel.MediaArtStore : GLib.Object {
         return thumb;
     }
 
-    public Thumbnail? find_media_art_any (MusicItem item) throws Error {
-        var thumb = this.find_media_art (item);
+    public Thumbnail? find_media_art_any (MediaObject object) throws Error {
+        var thumb = this.find_media_art (object);
         if (thumb == null) {
-            thumb = this.find_media_art (item, true);
+            thumb = this.find_media_art (object, true);
         }
 
         return thumb;
     }
 
-    public File get_media_art_file (string    type,
-                                    MusicItem item,
-                                    bool      simple = false) {
+    public File get_media_art_file (string      type,
+                                    MediaObject object,
+                                    bool        simple = false) {
+
         string hash;
         string suffix;
 
         if (simple) {
-            hash = this.get_simple_hash (type, item);
+            hash = this.get_simple_hash (type, object);
             suffix = "jpg";
         } else {
-            hash = this.get_hash (type, item);
+            hash = this.get_hash (type, object);
             suffix = "jpeg";
         }
         var file_path = "%s-%s.%s".printf (type, hash, suffix);
@@ -152,24 +158,24 @@ public class Rygel.MediaArtStore : GLib.Object {
         }
     }
 
-    private string get_simple_hash (string type, MusicItem item) {
+    private string get_simple_hash (string type, MediaObject object) {
         string hash;
         switch (type) {
             case "artist":
                 case "radio":
-                hash = this.normalize_and_hash (item.artist);
+                hash = this.normalize_and_hash (object.artist);
                 break;
             case "podcast":
-                hash = this.normalize_and_hash (item.title);
+                hash = this.normalize_and_hash (object.title);
                 break;
             case "album":
-                hash = this.normalize_and_hash (item.artist + "\t" +
-                                                item.album);
+                hash = this.normalize_and_hash (object.artist + "\t" +
+                                                object.album);
                 break;
             case "track":
-                hash = this.normalize_and_hash (item.artist + "\t" +
-                                                item.album + "\t" +
-                                                item.title);
+                hash = this.normalize_and_hash (object.artist + "\t" +
+                                                object.album + "\t" +
+                                                object.title);
                 break;
             default:
                 assert_not_reached ();
@@ -178,22 +184,22 @@ public class Rygel.MediaArtStore : GLib.Object {
         return hash;
     }
 
-    private string get_hash (string type, MusicItem item) {
+    private string get_hash (string type, MediaObject object) {
         string b = null, c = null;
         switch (type) {
             case "track":
-                b = this.normalize_and_hash (item.artist, false) + "-" +
-                    this.normalize_and_hash (item.album, false);
-                c = this.normalize_and_hash (item.title, false);
+                b = this.normalize_and_hash (object.artist, false) + "-" +
+                    this.normalize_and_hash (object.album, false);
+                c = this.normalize_and_hash (object.title, false);
                 break;
             case "album":
             case "artist":
-                b = this.normalize_and_hash (item.artist, false);
-                c = this.normalize_and_hash (item.album, false);
+                b = this.normalize_and_hash (object.artist, false);
+                c = this.normalize_and_hash (object.album, false);
                 break;
             case "radio":
             case "podcast":
-                b = this.normalize_and_hash (item.title, false);
+                b = this.normalize_and_hash (object.title, false);
                 c = PLACEHOLDER_HASH;
                 break;
         }

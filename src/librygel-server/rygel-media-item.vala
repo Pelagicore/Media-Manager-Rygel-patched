@@ -40,7 +40,6 @@ public abstract class Rygel.MediaItem : MediaObject {
     public string creator { get; set; }
 
     // Resource info
-    public string mime_type { get; set; }
     public string dlna_profile { get; set; }
 
     // Size in bytes

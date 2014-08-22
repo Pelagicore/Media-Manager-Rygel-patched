@@ -45,13 +45,13 @@ rygel_example_root_container_construct (GType object_type, const gchar *title) {
 
   item = rygel_music_item_new ("test 1", (RygelMediaContainer*) self, "Test 1", RYGEL_MUSIC_ITEM_UPNP_CLASS);
   rygel_media_item_add_uri (item, "file:///home/murrayc/Music/Madness/05_Baggy_Trousers.mp3");
-  rygel_media_item_set_mime_type (item, "audio/mpeg");
+  rygel_media_object_set_mime_type (RYGEL_MEDIA_OBJECT(item), "audio/mpeg");
   rygel_simple_container_add_child_item ((RygelSimpleContainer*) self, item);
   g_object_unref (item);
   
   item = rygel_music_item_new ("test 2", (RygelMediaContainer*) self, "Test 1", RYGEL_MUSIC_ITEM_UPNP_CLASS);
   rygel_media_item_add_uri (item, "file:///home/murrayc/Music/08%20Busload%20of%20Faith.mp3");
-  rygel_media_item_set_mime_type (item, "audio/mpeg");
+  rygel_media_object_set_mime_type (RYGEL_MEDIA_OBJECT(item), "audio/mpeg");
   rygel_simple_container_add_child_item ((RygelSimpleContainer*) self, item);
   g_object_unref (item);
 

@@ -40,7 +40,7 @@ public class Rygel.Example.RootContainerVala : Rygel.SimpleContainer {
          */
         var item = new MusicItem ("test 1", this, "Test 1");
         item.add_uri ("file:///home/murrayc/Music/Madness/05_Baggy_Trousers.mp3");
-        item.mime_type = "audio/mpeg";
+        (item as MediaObject).mime_type = "audio/mpeg";
         this.add_child_item(item);
          
         item = new MusicItem ("test 2", this, "Test 2");
