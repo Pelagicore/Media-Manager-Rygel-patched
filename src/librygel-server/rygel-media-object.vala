@@ -50,6 +50,8 @@ public abstract class Rygel.MediaObject : GLib.Object {
     public string artist { get; set; }
     public string genre { get; set; }
 
+    public string album_art_uri { get; set; }
+
     //TODO: { get; private set; } or, even better,
     // add virtual set_uri in Object and make add_uri() in Item into set_uri()
     // and make the uri property single-value.
