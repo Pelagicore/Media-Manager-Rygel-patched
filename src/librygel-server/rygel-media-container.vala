@@ -290,6 +290,10 @@ public abstract class Rygel.MediaContainer : MediaObject {
             didl_container.storage_used = this.storage_used;
         }
 
+        if (this.upnp_class == MUSIC_ALBUM) {
+            didl_container.album_art = this.album_art_uri;
+        }
+
         if (this is TrackableContainer) {
             didl_container.container_update_id = this.update_id;
             didl_container.update_id = this.object_update_id;
