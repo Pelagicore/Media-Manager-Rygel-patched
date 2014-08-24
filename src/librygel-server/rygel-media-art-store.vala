@@ -53,13 +53,18 @@ public class Rygel.MediaArtStore : GLib.Object {
         return media_art_store;
     }
 
-    public Thumbnail? find_media_art (MusicItem item,
+    public Thumbnail? find_media_art (MediaObject object,
                                       bool      simple = false) throws Error {
         string[] types = { "track", "album", "artist", "podcast", "radio" };
         File file = null;
 
+        if (!(object is MusicItem || object is MediaContainer)) {
+            warning ("MediaObject is not MusicItem or MediaContainer");
+            return null;
+        }
+
         foreach (var type in types) {
-            file = this.get_media_art_file (type, item, simple);
+            file = this.get_media_art_file (type, object, simple);
             if (file != null && file.query_exists (null)) {
                 break;
             } else {
@@ -86,19 +91,24 @@ public class Rygel.MediaArtStore : GLib.Object {
         return thumb;
     }
 
-    public Thumbnail? find_media_art_any (MusicItem item) throws Error {
-        var thumb = this.find_media_art (item);
+    public Thumbnail? find_media_art_any (MediaObject object) throws Error {
+        var thumb = this.find_media_art (object);
 
         return thumb;
     }
 
-    public File? get_media_art_file (string    type,
-                                     MusicItem item,
-                                     bool      simple = false) {
+    public File? get_media_art_file (string      type,
+                                     MediaObject object,
+                                     bool        simple = false) {
+        if (!(object is MusicItem || object is MediaContainer)) {
+            warning ("MediaObject is not MusicItem or MediaContainer");
+            return null;
+        }
+
         File file;
 
-        MediaArt.get_file (item.artist,
-                           type == "album" ? item.album : item.title,
+        MediaArt.get_file (object.artist,
+                           type == "album" ? object.album : object.title,
                            type,
                            null,
                            out file,
@@ -107,14 +117,19 @@ public class Rygel.MediaArtStore : GLib.Object {
         return file;
     }
 
-    public void add (MusicItem item, File file, uint8[]? data) {
+    public void add (MediaObject object, File file, uint8[]? data) {
+        if (!(object is MusicItem || object is MediaContainer)) {
+            warning ("MediaObject is not MusicItem or MediaContainer");
+            return;
+        }
+
         if (media_art_process == null) {
             return;
         }
 
         try {
             media_art_process.buffer (MediaArt.Type.ALBUM, MediaArt.ProcessFlags.NONE, file,
-                                      data, item.mime_type, item.artist, item.album);
+                                      data, object.mime_type, object.artist, object.album);
         } catch (Error error) {
             warning ("%s", error.message);
         }

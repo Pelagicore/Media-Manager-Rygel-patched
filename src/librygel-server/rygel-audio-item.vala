@@ -63,8 +63,6 @@ public class Rygel.AudioItem : MediaItem {
      */
     public int channels { get; set; default = -1; }
 
-    public string album { get; set; }
-
     public AudioItem (string         id,
                       MediaContainer parent,
                       string         title,

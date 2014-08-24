@@ -36,7 +36,6 @@ private errordomain Rygel.MediaItemError {
  */
 public abstract class Rygel.MediaItem : MediaObject {
     // Resource info
-    public string mime_type { get; set; }
     public string dlna_profile { get; set; }
 
     // Size in bytes

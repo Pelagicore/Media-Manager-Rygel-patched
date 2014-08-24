@@ -49,8 +49,11 @@ public abstract class Rygel.MediaObject : GLib.Object {
 
     public string artist { get; set; }
     public string genre { get; set; }
+    public string album { get; set; }
+    public string mime_type { get; set; }
 
-    public string album_art_uri { get; set; }
+    public Thumbnail album_art { get; set; }
+
 
     //TODO: { get; private set; } or, even better,
     // add virtual set_uri in Object and make add_uri() in Item into set_uri()
@@ -69,6 +72,26 @@ public abstract class Rygel.MediaObject : GLib.Object {
 
     public virtual void add_uri (string uri) {
         this.uris.add (uri);
+    }
+
+    public void lookup_album_art () {
+        assert (this.album_art == null);
+
+        var media_art_store = MediaArtStore.get_default ();
+        if (media_art_store == null) {
+            return;
+        }
+
+        try {
+            this.album_art = media_art_store.find_media_art_any (this);
+        } catch (Error err) {};
+    }
+
+    public void set_album_art_uri (string uri) {
+        if (this.album_art == null)
+            this.album_art = new Thumbnail();
+
+        this.album_art.uri = uri;
     }
 
     // You can keep both an unowned and owned ref to parent of this MediaObject.

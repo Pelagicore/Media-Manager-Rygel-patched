@@ -291,7 +291,7 @@ public abstract class Rygel.MediaContainer : MediaObject {
         }
 
         if (this.upnp_class == MUSIC_ALBUM) {
-            didl_container.album_art = this.album_art_uri;
+            didl_container.album_art = this.album_art.uri;
         }
 
         if (this is TrackableContainer) {
