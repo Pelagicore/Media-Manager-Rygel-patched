@@ -86,11 +86,7 @@ public class Rygel.RelationalExpression :
 
             return this.compare_string ((media_object as PhotoItem).creator);
         case "upnp:artist":
-            if (!(media_object is MusicItem)) {
-                return false;
-            }
-
-            return this.compare_string ((media_object as MusicItem).artist);
+            return this.compare_string ((media_object as MediaObject).artist);
         case "upnp:album":
             if (!(media_object is MusicItem)) {
                 return false;
